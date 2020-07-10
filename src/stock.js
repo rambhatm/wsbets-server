@@ -21,3 +21,13 @@ async function searchStocks(req, res) {
         error.stack
     }
 }
+
+async function buyStock(req, res) {
+    try {
+        let trade = new Trade({
+
+        })
+    } catch (error) {
+
+    }
+}

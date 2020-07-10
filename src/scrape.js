@@ -3,15 +3,7 @@ dotenv.config()
 const Stock = require('./models/stock_model')
 const axios = require('axios').default
 const csv = require('@fast-csv/parse');
-const puppeteer = require('puppeteer')
 
-const getImages = async () => {
-    try {
-
-    } catch (error) {
-
-    }
-}
 
 const getStocks = async () => {
     try {

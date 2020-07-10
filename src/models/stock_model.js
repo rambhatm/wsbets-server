@@ -7,7 +7,11 @@ const mongoose = require('mongoose');
 const stockConnection = mongoose.createConnection(process.env.STOCK_DB, { useNewUrlParser: true, useUnifiedTopology: true })
 
 const stockSchema = new mongoose.Schema({
-    Symbol: String,
+    Symbol: {
+        type: String,
+        index: true,
+        unique: true
+    },
     Name: String,
     LastSale: String,//num
     MarketCap: String,//num
@@ -17,8 +21,6 @@ const stockSchema = new mongoose.Schema({
     URL: String
 
 })
-
-stockSchema.index({ Symbol: 1, unique: true })
 
 
 const Stock = stockConnection.model("Stock", stockSchema, process.env.STOCK_COLLY)
