@@ -4,10 +4,12 @@
     stock data endpoint for frontend
 */
 const Stock = require('./models/stock_model')
+const Trade = require('./models/trade_model')
 const router = require('express').Router()
 
 //apis
 router.get("/search", searchStocks)
+router.post("/trade", tradeStock)
 
 module.exports = router
 
@@ -22,12 +24,19 @@ async function searchStocks(req, res) {
     }
 }
 
-async function buyStock(req, res) {
+async function tradeStock(req, res) {
     try {
         let trade = new Trade({
-
+            userID: req.session.user,
+            action: req.body.action,
+            symbol: req.body.symbol,
+            buyPrice: req.body.buyPrice,
+            sellPrice: req.body.sellPrice,
+            numShares: req.body.numShares
         })
+        trade.save()
+        res.end()
     } catch (error) {
-
+        error.stack
     }
 }
