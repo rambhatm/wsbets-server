@@ -5,6 +5,7 @@
 */
 const Stock = require('./models/stock_model')
 const Trade = require('./models/trade_model')
+const Users = require('./models/user_model')
 const router = require('express').Router()
 
 //apis
@@ -34,7 +35,8 @@ async function tradeStock(req, res) {
             sellPrice: req.body.sellPrice,
             numShares: req.body.numShares
         })
-        trade.save()
+        let tradeResult = await trade.save()
+        let updateUser = await Users.findOneAndUpdate({ userID: req.session.user }, { trades: trades.push(`${tradeResult._id}`) }).exec()
         res.end()
     } catch (error) {
         error.stack

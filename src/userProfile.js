@@ -1,21 +1,7 @@
 //contains sceme & functionality of user profile used during authentication
 
-const dotenv = require('dotenv')
-dotenv.config()
-const mongoose = require('mongoose');
-const { ObjectID } = require('mongodb');
+require('./models/user_model')
 
-const userConnection = mongoose.createConnection(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
-
-const userProfileSchema = new mongoose.Schema({
-    userID: {
-        type: String,
-        required: true
-    },
-    redditProfile: mongoose.Schema.Types.Mixed
-})
-
-let userProfile = userConnection.model("userProfile", userProfileSchema, "userProfiles")
 
 module.exports = {
     getUserProfile: async (id) => {
@@ -39,13 +25,3 @@ module.exports = {
         }
     }
 }
-
-
-mongoose.connection.on("open", function (ref) {
-    console.log("Connected to mongo server.");
-});
-
-mongoose.connection.on("error", function (err) {
-    console.log("Could not connect to mongo server!");
-    return console.log(err);
-});
