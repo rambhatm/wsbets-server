@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const findOrCreatePlugin = require('mongoose-findorcreate');
 const connection = mongoose.createConnection(process.env.USER_DB, { useNewUrlParser: true, useUnifiedTopology: true })
 
 const userProfileSchema = new mongoose.Schema({
@@ -11,6 +12,7 @@ const userProfileSchema = new mongoose.Schema({
     },
     redditProfile: mongoose.Schema.Types.Mixed
 })
+userProfileSchema.plugin(findOrCreatePlugin)
 
-let userProfile = connection.model("User", userProfileSchema, process.env.USER_COLLY)
-module.exports = userProfile
+let User = connection.model("User", userProfileSchema, process.env.USER_COLLY)
+module.exports = User

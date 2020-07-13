@@ -8,31 +8,44 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 const methodOverride = require('method-override');
 const morgan = require('morgan')
+const passport = require('passport')
 
 //vuejs app production
 //const publicRoot = '../app/dist'
-const users = require('./userProfile');
-const stocksRouter = require('./stock')
 
-//app.use(express.static(publicRoot))
-// setup for body-parser module
+
 app.use(morgan('dev'))
+app.use(cookieParser())
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-//app.use(express.logger());
-app.use(cookieParser())
 app.use(methodOverride());
-
 // express session middleware setup
 app.use(session({
     secret: process.env.EXPRESS_SESSION_SECRET,
     resave: true,
     saveUninitialized: true
 }));
-
 // passport middleware setup ( it is mandatory to put it after session middleware setup)
+app.use(passport.initialize())
+app.use(passport.session())
+
+passport.serializeUser(function (user, done) {
+    done(null, user)
+});
+
+passport.deserializeUser(function (obj, done) {
+    done(null, obj)
+});
+
 const reddit = require('./reddit')
-reddit.initPassport(app)
+
+
+passport.use(reddit.strategy)
+
+
+const stocksRouter = require('./stock')
+
+
 
 //app.use(app.router)
 /* Deployment stuff
@@ -42,20 +55,12 @@ app.get("/", (req, res, next) => {
 */
 
 //Reddit authentication endpoints
-app.use('/api/auth/reddit', reddit.router)
+app.use('/api/reddit', reddit.router)
 //Stock endpoints
 app.use('/api/stock', stocksRouter)
-
-//User profile
-app.get("/api/auth/user", /*protectedEndpoint,*/ async (req, res) => {
-    let user = await users.getUserProfile(req.query.userID)
-    res.send({ user: user })
-    res.end()
-})
-
-app.post("/api/auth/user", async (req, res) => {
-    await users.createNewUser(req.body.id, req.body.reddit)
-    res.end()
+//test dash
+app.get('/dashboard', reddit.protectAPI, (req, res) => {
+    res.end("dashboard")
 })
 
 app.listen(process.env.SERVER_PORT, () => {
