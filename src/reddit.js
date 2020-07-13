@@ -7,6 +7,7 @@ const passport = require('passport')
 const router = require('express').Router()
 const RedditStrategy = require('passport-reddit').Strategy
 const users = require('./models/user_model')
+const jwt = require('jsonwebtoken')
 
 router.get("/login", login)
 router.get("/callback", loginCallback)
@@ -34,6 +35,19 @@ module.exports = {
             return next()
         }
         res.redirect('/api/reddit/login')
+    },
+    jwtProtect: async (req, res, next) => {
+        try {
+            const authHeader = authHeader.headers.authorization
+            const token = authHeader && authHeader.split(' ')[1]
+            if (token == null) {
+                res.sendStatus(401)//TODO should route to main page
+            }
+
+        } catch (error) {
+
+        }
+
     }
 }
 
