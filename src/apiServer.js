@@ -38,6 +38,7 @@ passport.deserializeUser(function (obj, done) {
 });
 
 const reddit = require('./reddit')
+const test_login = require('./test_login')
 
 
 passport.use(reddit.strategy)
@@ -55,11 +56,12 @@ app.get("/", (req, res, next) => {
 */
 
 //Reddit authentication endpoints
-app.use('/api/reddit', reddit.router)
+//app.use('/api/reddit', reddit.router)
+app.use('/api/reddit/login', test_login.router)
 //Stock endpoints
 app.use('/api/stock', stocksRouter)
 //test dash
-app.get('/dashboard', reddit.protectAPI, (req, res) => {
+app.get('/dashboard', test_login.protect_api, (req, res) => {
     res.end("dashboard")
 })
 

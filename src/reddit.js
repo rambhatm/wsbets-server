@@ -36,18 +36,21 @@ module.exports = {
         }
         res.redirect('/api/reddit/login')
     },
-    jwtProtect: async (req, res, next) => {
-        try {
-            const authHeader = authHeader.headers.authorization
-            const token = authHeader && authHeader.split(' ')[1]
-            if (token == null) {
-                res.sendStatus(401)//TODO should route to main page
-            }
-
-        } catch (error) {
-
+    jwtProtect: (req, res, next) => {
+        const authHeader = req.headers['authorization']
+        const token = authHeader && authHeader.split(' ')[1]
+        if (token == null) {
+            //res.sendStatus(401)//TODO should route to main page
+            res.redirect('/api/reddit/login')
         }
-
+        jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+            if (err) {
+                console.log(err)
+                return res.sendStatus(403)
+            }
+            req.userID = user
+            next()
+        })
     }
 }
 
@@ -86,8 +89,14 @@ function logout(req, res) {
 async function verifyUser(accessToken, refreshToken, profile, done) {
     try {
         let userProfile = await users.findOrCreate({ userID: profile.id }, { redditProfile: profile._json })
-        return done(null, userProfile)
+        let jwtToken = await generateJWT(userProfile.userID)
+        return done(null, jwtToken)
     } catch (error) {
         return done(error, null)
     }
+}
+
+async function generateJWT(userID) {
+    //expires in 15 days
+    return jwt.sign(userID, process.env.JWT_SECRET, { expiresIn: '1296000' })
 }
