@@ -62,7 +62,7 @@ app.use('/api/reddit/login', test_login.router)
 app.use('/api/stock', stocksRouter)
 //test dash
 app.get('/dashboard', test_login.protect_api, (req, res) => {
-    res.end("dashboard")
+    res.end(`dashboard user ${req.userID}`)
 })
 
 app.listen(process.env.SERVER_PORT, () => {
