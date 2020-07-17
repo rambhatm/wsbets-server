@@ -17,6 +17,7 @@ const stockSchema = new mongoose.Schema({
     MarketCap: String,//num
     IPOyear: String,
     Sector: String,
+    Image: String,
     Industry: String,
     URL: String
 
