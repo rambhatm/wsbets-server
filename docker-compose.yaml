@@ -7,6 +7,8 @@ services:
         dockerfile: ./Dockerfile
     volumes:
       - /usr/src/app/scrappy/node_modules
-      - ./.env:/app/.env
+
       - ./models:/usr/src/app/models
     command: npm start
+    env_file: 
+      - .env
