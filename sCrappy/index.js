@@ -1,4 +1,4 @@
 const scrappy = require('./scrappy')
 
-scrappy.initStocks()
+//scrappy.initStocks()
 scrappy.updateQuote('tsla')

@@ -56,6 +56,7 @@ async function updateQuote(symbol) {
 
     try {
         let resp = await axios.get(url, options)
+        console.log(resp.data)
         let quote = await Quote.findOneAndUpdate({ "Symbol": symbol }, {
             price: price.push({
                 Time: resp.data.date,
@@ -66,6 +67,7 @@ async function updateQuote(symbol) {
 
             })
         })
+        console.log(quote)
         return quote
 
     } catch (error) {
