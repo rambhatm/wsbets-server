@@ -53,20 +53,23 @@ async function initStocks() {
 
 async function updateQuote(symbol) {
     url = `https://api.tiingo.com/tiingo/daily/${symbol}/prices`
-    options = { "headers": { "Authorization": process.env.T_KEY } }
+    options = { "headers": { "Authorization": process.env.T_KEY, 'Content-Type': 'application/json' } }
 
     try {
         let resp = await axios.get(url, options)
-        console.log(resp.data)
-        let quote = await Quote.findOneAndUpdate({ "Symbol": symbol }, {
-            price: price.push({
-                Time: resp.data.date,
-                High: resp.data.high,
-                Low: resp.data.low,
-                Open: resp.data.open,
-                Volume: resp.data.volume
+        const stock = resp.data[0]
+        // console.log(stock)
+        let quote = await Quote.findOneAndUpdate({ Symbol: symbol }, {
+            "$push": {
+                "price": {
+                    Time: stock.date,
+                    High: stock.high,
+                    Low: stock.low,
+                    Open: stock.open,
+                    Volume: stock.volume
 
-            })
+                }
+            }
         })
         return quote
 
@@ -85,7 +88,7 @@ async function startScrappy() {
         wsb100.forEach(sym => {
             updateQuote(sym)
         });
-    }, 60000)
+    }, 10000)
 
 
 }
