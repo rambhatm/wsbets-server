@@ -9,7 +9,8 @@ const csv = require('@fast-csv/parse');
 
 module.exports = {
     initStocks,
-    updateQuote
+    updateQuote,
+    startScrappy,
 }
 
 const wsb100 = ['tsla', 'snap', 'amzn', 'aapl', 'msft']
@@ -56,6 +57,7 @@ async function updateQuote(symbol) {
 
     try {
         let resp = await axios.get(url, options)
+        console.log(resp.data)
         let quote = await Quote.findOneAndUpdate({ "Symbol": symbol }, {
             price: price.push({
                 Time: resp.data.date,
@@ -73,4 +75,17 @@ async function updateQuote(symbol) {
 
     }
     return
+}
+
+//Starts the scrappy service
+async function startScrappy() {
+    //Start it simple, just update wsb quotes every 1 minutes
+    const timeout = setInterval(async () => {
+        console.log("Running scrappy...")
+        wsb100.forEach(sym => {
+            updateQuote(sym)
+        });
+    }, 60000)
+
+
 }
