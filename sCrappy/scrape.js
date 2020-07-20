@@ -1,6 +1,6 @@
 const dotenv = require('dotenv')
-dotenv.config()
-const Stock = require('./models/stock_model')
+dotenv.config({ path: "../.env" })
+const Stock = require('../models/stock_model')
 const axios = require('axios').default
 const csv = require('@fast-csv/parse');
 
