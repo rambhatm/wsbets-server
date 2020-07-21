@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 //const findOrCreatePlugin = require('mongoose-findorcreate');
 
-
+const schedule = require('node-schedule')
 const Stock = require('../models/stock_model')(mongoose)
 const Quote = require('../models/quote_model')(mongoose)
 const axios = require('axios').default
@@ -82,13 +82,16 @@ async function updateQuote(symbol) {
 
 //Starts the scrappy service
 async function startScrappy() {
-    //Start it simple, just update wsb quotes every 1 minutes
-    const timeout = setInterval(async () => {
+    //Get end of day quote on trading days at 4:05 PM EST
+    var rule = new schedule.RecurrenceRule();
+    rule.dayOfWeek = [new schedule.Range(1, 5)];
+    rule.hour = 19;
+    rule.minute = 5;
+
+    var j = schedule.scheduleJob(rule, async () => {
         console.log("Running scrappy...")
         wsb100.forEach(sym => {
             updateQuote(sym)
-        });
-    }, 10000)
-
-
+        })
+    })
 }
