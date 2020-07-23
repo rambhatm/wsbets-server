@@ -1,5 +1,6 @@
 const router = require('express').Router()
-const users = require('./models/user_model')
+const mongoose = require('mongoose')
+const users = require('../models/user_model')(mongoose)
 const jwt = require('jsonwebtoken')
 
 router.get('/login_test', async (req, res) => {

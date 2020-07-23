@@ -6,7 +6,8 @@ const crypto = require('crypto')
 const passport = require('passport')
 const router = require('express').Router()
 const RedditStrategy = require('passport-reddit').Strategy
-const users = require('./models/user_model')
+const mongoose = require('mongoose')
+const users = require('../models/user_model')(mongoose)
 const jwt = require('jsonwebtoken')
 
 router.get("/login", login)

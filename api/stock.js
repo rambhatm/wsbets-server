@@ -3,9 +3,10 @@
     /auth/stock/
     stock data endpoint for frontend
 */
-const Stock = require('./models/stock_model')
-const Trade = require('./models/trade_model')
-const Users = require('./models/user_model')
+const mongoose = require('mongoose')
+const Stock = require('../models/stock_model')(mongoose)
+const Trade = require('../models/trade_model')(mongoose)
+const Users = require('../models/user_model')(mongoose)
 const router = require('express').Router()
 
 //apis
