@@ -6,8 +6,15 @@ module.exports = function (mongoose) {
             type: String,
             required: true
         },
-        trades: {
-            type: [String]
+        cash: {
+            type: Number,
+
+        },
+        holdings: {
+            type: [{
+                symbol: String,
+                tradeID: String,
+            }]
         },
         redditProfile: mongoose.Schema.Types.Mixed
     })

@@ -7,7 +7,10 @@ module.exports = function (mongoose) {
             type: String,
             default: Date.now
         },
-        userID: String,
+        userID: {
+            type: String,
+            index: true
+        },
         action: {
             type: String,
             enum: ['buy', 'sell'],

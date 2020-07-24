@@ -26,10 +26,14 @@ async function searchStocks(req, res) {
     }
 }
 
+async function updateUserHoldings(userID, symbol, tradeID) {
+
+}
+
 async function tradeStock(req, res) {
     try {
         let trade = new Trade({
-            userID: req.session.user,
+            userID: req.userID,
             action: req.body.action,
             symbol: req.body.symbol,
             buyPrice: req.body.buyPrice,
