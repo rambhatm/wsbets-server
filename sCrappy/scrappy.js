@@ -1,3 +1,6 @@
+//A basic scraping service to get end of day stock prices and
+//stock ticker details.
+
 const mongoose = require('mongoose');
 
 
@@ -44,11 +47,11 @@ async function initStocks() {
                     await quote.save()
                 }
             })
-            .on('end', rowCount => console.log(`Parsed ${rowCount} rows`));
+            .on('end', rowCount => {return rowCount})
     } catch (error) {
-
+        error.stack
+        return 0
     }
-    return
 }
 
 async function updateQuote(symbol) {

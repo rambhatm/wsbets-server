@@ -23,3 +23,27 @@ async function searchSymbol(symbol) {
         error.stack
     }
 }
+
+async function buyStock(symbol, userID, numStocks) {
+    try {
+        //Get price of stock and user profile
+        //let user = 
+
+
+        //Check if they have enough money for trade
+
+        //Now trade
+        let trade = new Trade({
+            userID: userID,
+            action: 'buy',
+            symbol: symbol,
+            buyPrice: req.body.buyPrice,
+            numShares: numStocks
+        })
+        let tradeResult = await trade.save()
+        let updateUser = await Users.findOneAndUpdate({ userID: req.session.user }, { trades: trades.push(`${tradeResult._id}`) }).exec()
+        res.end()
+    } catch (error) {
+        error.stack
+    }
+}
