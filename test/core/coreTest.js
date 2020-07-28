@@ -6,16 +6,23 @@ const scrappy = require('../../sCrappy/scrappy')
 const { before } = require('mocha')
 
 
-describe("core", async function () {
-    process.env.STOCK_DB += '_test'
-    before(async function(){
+describe("core", function () {
+
+    before(async function () {
+        //process.env.STOCK_DB = process.env.STOCK_DB + '_test'
+        console.log(process.env.STOCK_DB)
         let numRowsParsed = await scrappy.initStocks()
         assert.notEqual(numRowsParsed, 0)
     })
 
-    after(async function(){
-        let conn = await mongoose.createConnection(process.env.STOCK_DB, { useNewUrlParser: true, useUnifiedTopology: true })
-        await conn.dropDatabase()
+    after(async function () {
+        console.log('after')
+        await mongoose.disconnect()
+
+
+        let conn = await mongoose.connect(process.env.STOCK_DB, { useNewUrlParser: true, useUnifiedTopology: true })
+        let dropped = await conn.connection.db.dropDatabase()
+        assert.equal(dropped, true)
 
     })
 
