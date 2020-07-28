@@ -13,8 +13,11 @@ module.exports = {
 
 async function searchSymbol(symbol) {
     try {
-        let stock = await Stock.findOne({ Symbol: req.query.query }).exec()
-        let quote = await Quote.findOne({ Symbol: req.query.query }).exec()
+        let stock = await Stock.findOne({ Symbol: symbol }).exec()
+        console.log(stock)
+
+        let quote = await Quote.findOne({ Symbol: symbol }).exec()
+        console.log(quote)
 
         //let result = await Promise.all([stock,quote])
         stock.Price = quote.price
